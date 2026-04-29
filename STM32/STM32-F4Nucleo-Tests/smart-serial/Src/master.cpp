@@ -175,7 +175,6 @@ int32_t Master::send_string(const char* const str, const uint8_t cmd_byte) {
     // Converts string to uint8_t buffer and sends that
     int32_t result = S_SERIAL_ERR;
     if (str != NULL) {
-        const size_t payload_len = strlen(str);
         const uint8_t* buf = reinterpret_cast<const uint8_t*>(str[0U]);
         result = send_bytes(buf, cmd_byte);
     }

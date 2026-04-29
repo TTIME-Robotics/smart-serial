@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "smart-serial/api.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
