@@ -15,6 +15,7 @@ Release/
 .project
 .settings/
 .metadata/
+Debug/
 
 # STM32CubeMX generated (keep if you want to track MX config, ignore build artifacts)
 # Uncomment the next line to ignore the .ioc file (not recommended)
