@@ -1,0 +1,50 @@
+# STM32CubeIDE / Eclipse build output
+Debug/
+Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.su
+*.o
+*.d
+
+# STM32CubeIDE project files (auto-generated, machine-specific)
+.cproject
+.project
+.settings/
+.metadata/
+
+# STM32CubeMX generated (keep if you want to track MX config, ignore build artifacts)
+# Uncomment the next line to ignore the .ioc file (not recommended)
+# *.ioc
+
+# IDE-specific
+*.launch
+*.uvprojx
+*.uvoptx
+
+# Compiler/linker artifacts
+*.a
+*.lib
+*.axf
+
+# OpenOCD / debug configs (optional, keep if shared across team)
+# openocd.cfg
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Backup files
+*.bak
+*.orig
+*.swp
+*.tmp
