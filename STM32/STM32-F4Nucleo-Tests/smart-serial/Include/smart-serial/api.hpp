@@ -14,7 +14,7 @@
 #include "smart-serial/error.h"
 #include "smart-serial/types.h"
 #include "smart-serial/frame.hpp"
-// TODO: #include "STM32_port"
+#include "smart-serial/port/stm32_uart_port.hpp"
 
 #ifdef SMART_SERIAL_STM32_RTOS_CLK
 // TODO: rtos clock include
