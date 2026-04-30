@@ -11,6 +11,7 @@
 
 #include "smart-serial/api.hpp"
 #include "smart-serial/port/iport.hpp"
+#include "main.h"
 
 namespace Smart_serial {
 
@@ -25,7 +26,7 @@ namespace Smart_serial {
 			 */
 			STM32_uart_port(UART_HandleTypeDef* huart,
 							GPIO_TypeDef* de_port,
-							uint16_t* de_pin);
+							uint16_t de_pin);
 			/**
 			 * @brief trivial destructor
 			 */
@@ -37,10 +38,10 @@ namespace Smart_serial {
 			 * @param len the length of byte buffer to write
 			 * @return int32_t number of bytes written, or error code
 			 */
-			int32_t write(const uint8_t* buf, const uint16_t len) override;
+			int32_t write(const uint8_t* const buf, const uint16_t len) override;
 
 			/**
-			 * @brief read a single byte from rx buffer
+			 * @brief read a single byte from rx buffer (non blocking)
 			 * @return 1 if successful, error code if not
 			 */
 			int32_t read_byte() override;
@@ -54,6 +55,8 @@ namespace Smart_serial {
 			UART_HandleTypeDef* huart_;
 			GPIO_TypeDef* de_port_;
 			uint16_t de_pin_;
+
+			static const uint16_t MAX_FLUSH_ITERS = 512U;
 
 			/**
 			 * @brief drive the DE pin high to signal a write

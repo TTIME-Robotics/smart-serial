@@ -57,6 +57,8 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+Smart_serial::STM32_uart_port port (&huart2, UART_DIR_GPIO_Port, UART_DIR_Pin);
+
 /* USER CODE END 0 */
 
 /**
