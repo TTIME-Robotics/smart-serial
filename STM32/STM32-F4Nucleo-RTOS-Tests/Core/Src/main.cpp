@@ -296,7 +296,10 @@ void startBlink01(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+    osDelay(350);
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+    osDelay(1000);
   }
   /* USER CODE END 5 */
 }
@@ -314,6 +317,7 @@ void startTests(void *argument)
   /* Infinite loop */
   for(;;)
   {
+	  // TODO: Test smart serial Lib
     osDelay(1);
   }
   /* USER CODE END startTests */
