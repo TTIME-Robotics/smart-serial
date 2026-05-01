@@ -11,7 +11,7 @@
 
 #include "smart-serial/master.hpp"
 #include "smart-serial/crc.hpp"
-#include "error.h"
+#include "smart-serial/error.h"
 #include "smart-serial/frame.hpp"
 #include "smart-serial/clock/IClock.hpp"
 
