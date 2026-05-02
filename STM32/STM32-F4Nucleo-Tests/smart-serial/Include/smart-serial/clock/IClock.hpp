@@ -31,7 +31,7 @@ namespace Smart_serial { namespace Clock {
              * @brief Delay program execution
              * @param delay_time Time in milliseconds to delay program
              */
-            virtual void delay(uint32_t delay_time) const = 0;
+            virtual void delay(const uint32_t delay_time) const = 0;
         private:
             I_clock(const I_clock&) = delete;
             I_clock& operator=(const I_clock&) = delete;

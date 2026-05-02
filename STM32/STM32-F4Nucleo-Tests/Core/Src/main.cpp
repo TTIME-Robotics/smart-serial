@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#define SMART_SERIAL_STM32_HAL_CLOCK
 #include "smart-serial/api.hpp"
+#include "smart-serial/clock/stm32_hal_clock.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,7 +38,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -56,8 +57,10 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-Smart_serial::STM32_uart_port port (&huart2, UART_DIR_GPIO_Port, UART_DIR_Pin);
+#include "smart-serial/port/mock_port.hpp"
+Smart_serial::Mock_port<256, 256> port;
+Smart_serial::Clock::STM32_hal_clock hal_clk;
+Smart_serial::Slave slave(port, hal_clk, 0x02U, 0xFE, 0xAAU, 1000U);
 
 /* USER CODE END 0 */
 
@@ -69,7 +72,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -78,6 +80,18 @@ int main(void)
 	HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+	hal_clk.delay(1000U);
+	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+	hal_clk.delay(1000U);
+	// test slave
+	slave.set_auto_handshake(true);
+	slave.send_response("Hello World", 0x12U);
+	const uint8_t* s = reinterpret_cast<const uint8_t*>("Hello World");
+	uint16_t t = sizeof(s);
+	const uint8_t* txBuf = port.get_tx_data();
+	uint16_t txLen = port.get_tx_data_len();
 
   /* USER CODE END Init */
 

@@ -17,10 +17,15 @@
 #include "smart-serial/port/stm32_uart_port.hpp"
 
 #ifdef SMART_SERIAL_STM32_RTOS_CLK
+
 // TODO: rtos clock include
+
 #endif
+
 #ifdef SMART_SERIAL_STM32_HAL_CLK
-// TODO: hal clock include
+
+#include "smart-serial/clock/stm32_hal_clock.hpp"
+
 #endif
 
 
