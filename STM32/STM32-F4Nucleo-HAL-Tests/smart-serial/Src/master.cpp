@@ -23,7 +23,7 @@
 using namespace Smart_serial;
 using namespace Smart_serial::Clock;
 using namespace Smart_serial::Frame;
-using namespace Smart_serial::CRC;
+using namespace Smart_serial::CRC_;
 
 // Initialise constants and references
 Master::Master(I_port& port,

@@ -19,7 +19,7 @@
 #include <string.h>
 
 using namespace Smart_serial;
-using namespace Smart_serial::CRC;
+using namespace Smart_serial::CRC_;
 
 Slave::Slave(
     I_port& port, 

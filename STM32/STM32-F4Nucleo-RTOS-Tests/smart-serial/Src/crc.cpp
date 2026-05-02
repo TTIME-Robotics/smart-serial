@@ -17,7 +17,7 @@
 
 using namespace Smart_serial;
 
-int16_t CRC::compute_crc16(const uint8_t* const data, uint16_t length) {
+int16_t CRC_::compute_crc16(const uint8_t* const data, uint16_t length) {
     uint16_t result = 0;
     if (data != NULL){
         // Constants for CRC calculation
@@ -52,7 +52,7 @@ int16_t CRC::compute_crc16(const uint8_t* const data, uint16_t length) {
     return result;
 }
 
-int16_t CRC::compute_crc16(const Frame::Raw_frame *const raw_frame) {
+int16_t CRC_::compute_crc16(const Frame::Raw_frame *const raw_frame) {
     uint16_t result = S_SERIAL_ERR_2_BYTE;
     if (raw_frame != NULL) {
         result = compute_crc16(raw_frame->data, raw_frame->length);
@@ -60,7 +60,7 @@ int16_t CRC::compute_crc16(const Frame::Raw_frame *const raw_frame) {
     return result;
 }
 
-int16_t CRC::extract_crc16(const uint8_t* const data, uint16_t offset) {
+int16_t CRC_::extract_crc16(const uint8_t* const data, uint16_t offset) {
     int32_t result = 0;
     if (data != NULL){
         // Extract little endian from data
@@ -74,7 +74,7 @@ int16_t CRC::extract_crc16(const uint8_t* const data, uint16_t offset) {
     return result;
 }
 
-int32_t CRC::append_crc16(uint8_t* const  buf,
+int32_t CRC_::append_crc16(uint8_t* const  buf,
                              const size_t    cap,
                              const uint16_t  offset,
                              const uint16_t  crc)
@@ -99,7 +99,7 @@ int32_t CRC::append_crc16(uint8_t* const  buf,
     return result;
 }
 
-int32_t CRC::append_crc16(Frame::Raw_frame *const raw_frame,
+int32_t CRC_::append_crc16(Frame::Raw_frame *const raw_frame,
                            const std::size_t cap,
                            const uint16_t offset,
                            const uint16_t crc) {

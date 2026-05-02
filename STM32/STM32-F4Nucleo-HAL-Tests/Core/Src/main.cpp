@@ -58,7 +58,6 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 #include "smart-serial/port/mock_port.hpp"
-#include "smart-serial/crc.hpp"
 Smart_serial::Mock_port<256, 256> port;
 Smart_serial::Clock::STM32_hal_clock hal_clk;
 Smart_serial::Slave slave(port, hal_clk, 0x02U, 0xFE, 0xAAU, 1000U);

@@ -91,7 +91,7 @@ int32_t Frame::parse_frame(Frame *const frame_out,
         
         const uint8_t payload_len = buf[offset + 4U];
 
-        if (len >= (static_cast<size_t>(offset) + HEADER_SIZE + static_cast<size_t>(payload_len) + CRC::CRC_LENGTH)){
+        if (len >= (static_cast<size_t>(offset) + HEADER_SIZE + static_cast<size_t>(payload_len) + CRC_::CRC_LENGTH)){
         
             // Assign header info
             frame_out->header.start_byte = buf[offset];
