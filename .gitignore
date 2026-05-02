@@ -38,3 +38,4 @@ CMakeLists.txt
 build/
 .cache/
 .VSCodeCounter/
+STM32/STM32-F4Nucleo-Tests/.settings/language.settings.xml
