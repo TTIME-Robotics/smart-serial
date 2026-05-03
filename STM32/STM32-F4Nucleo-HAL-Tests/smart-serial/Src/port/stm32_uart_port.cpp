@@ -11,8 +11,35 @@
 #include <cstring>
 using namespace Smart_serial;
 
-// Definition of global instance pointer
-STM32_uart_port* Smart_serial::g_port_instance = NULL;
+// Registry definition
+STM32_uart_port* Smart_serial::g_port_registry[MAX_UART_PORTS] = {};
+
+// Helper to get registry index from UART instance
+static int8_t get_uart_index(const USART_TypeDef* const instance)
+{
+    int8_t index = -1;
+    if      (instance == USART1) { index = 0; }
+    else if (instance == USART2) { index = 1; }
+	#if defined(USART3)
+		else if (instance == USART3) { index = 2; }
+	#endif
+	#if defined(UART4)
+		else if (instance == UART4)  { index = 3; }
+	#endif
+	#if defined(UART5)
+		else if (instance == UART5)  { index = 4; }
+	#endif
+	#if defined(USART6)
+		else if (instance == USART6) { index = 5; }
+	#endif
+	#if defined(UART7)
+		else if (instance == UART7)  { index = 6; }
+	#endif
+	#if defined(UART8)
+		else if (instance == UART8)  { index = 7; }
+	#endif
+    return index;
+}
 
 // Initialise object's attributes
 STM32_uart_port::STM32_uart_port(UART_HandleTypeDef* huart,
@@ -23,6 +50,16 @@ STM32_uart_port::STM32_uart_port(UART_HandleTypeDef* huart,
 
 	// Initialsie ring buffer
 	memset(const_cast<uint8_t*>(rx_ring_), 0U, sizeof(rx_ring_));
+
+	// Register this instance by UART index
+	const int8_t index =
+		get_uart_index(huart_->Instance);
+
+	if (index >= 0)
+	{
+		g_port_registry[
+			static_cast<uint8_t>(index)] = this;
+	}
 
 	// Enable UART interrupt on peripheral level (instead of MX)
 	__HAL_UART_ENABLE_IT(huart_, UART_IT_RXNE);
@@ -52,8 +89,6 @@ STM32_uart_port::STM32_uart_port(UART_HandleTypeDef* huart,
 	// Configure and enable NVIC:
 	HAL_NVIC_SetPriority(irqn, 5U, 0U);
 	HAL_NVIC_EnableIRQ(irqn);
-
-	g_port_instance = this;
 
 	// Port is open
 
@@ -128,54 +163,63 @@ void STM32_uart_port::release_de() {
 	HAL_GPIO_WritePin(de_port_, de_pin_, GPIO_PIN_RESET);
 }
 
+// ISR handlers — each dispatches to the correct registry slot
 extern "C" void USART1_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[0U] != NULL) { g_port_registry[0U]->rx_isr(); }
 }
 
 extern "C" void USART2_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[1U] != NULL) { g_port_registry[1U]->rx_isr(); }
 }
 
 #if defined(USART3)
 extern "C" void USART3_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[2U] != NULL) { g_port_registry[2U]->rx_isr(); }
 }
 #endif
 
 #if defined(UART4)
 extern "C" void UART4_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[3U] != NULL) { g_port_registry[3U]->rx_isr(); }
 }
 #endif
 
 #if defined(UART5)
 extern "C" void UART5_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[4U] != NULL) { g_port_registry[4U]->rx_isr(); }
 }
 #endif
 
 #if defined(USART6)
 extern "C" void USART6_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[5U] != NULL) { g_port_registry[5U]->rx_isr(); }
 }
 #endif
 
 #if defined(UART7)
 extern "C" void UART7_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[6U] != NULL) { g_port_registry[6U]->rx_isr(); }
 }
 #endif
 
 #if defined(UART8)
 extern "C" void UART8_IRQHandler(void)
 {
-    if (g_port_instance != NULL) { g_port_instance->rx_isr(); }
+
+    if (g_port_registry[7U] != NULL) { g_port_registry[7U]->rx_isr(); }
 }
 #endif

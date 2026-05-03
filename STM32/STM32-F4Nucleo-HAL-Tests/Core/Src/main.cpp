@@ -101,11 +101,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   int32_t res = slave.send_response("Hello World!", 0x06U);
+  Smart_serial::Receive_result result = Smart_serial::Receive_result::ERR_TIMEOUT;
+  slave.set_auto_handshake(true);
   while (1)
   {
 	  Smart_serial::Frame::Frame frame;
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-	  Smart_serial::Receive_result result = slave.receive_request(&frame, 1000U);
+	  if (result == Smart_serial::Receive_result::ERR_TIMEOUT) result = slave.receive_request(&frame, 1000U);
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 	  HAL_Delay(1000U);
     /* USER CODE END WHILE */

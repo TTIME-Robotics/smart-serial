@@ -82,8 +82,9 @@ namespace Smart_serial {
 			STM32_uart_port& operator=(STM32_uart_port&) = delete;
 
 	};
-	// Forward declaration for ISR access
-	extern STM32_uart_port* g_port_instance;
+	static const uint8_t MAX_UART_PORTS = 8U;
+
+	extern STM32_uart_port* g_port_registry[MAX_UART_PORTS];
 
 }
 
