@@ -13,6 +13,7 @@
 #include "smart-serial/port/iport.hpp"
 #include "main.h"
 
+
 namespace Smart_serial {
 
 	class STM32_uart_port : public I_port {
@@ -50,6 +51,9 @@ namespace Smart_serial {
 			 * @brief flush the rx buffer
 			 */
 			void flush_rx() override;
+
+			/** @brief ISR for handling recieved bytes */
+			void rx_isr();
 		private:
 
 			UART_HandleTypeDef* huart_;
@@ -57,6 +61,13 @@ namespace Smart_serial {
 			uint16_t de_pin_;
 
 			static const uint16_t MAX_FLUSH_ITERS = 512U;
+
+			static const uint16_t RING_BUF_SIZE = 256U;
+
+			volatile uint8_t rx_ring_[RING_BUF_SIZE];
+			volatile uint16_t rx_head_;
+			volatile uint16_t rx_tail_;
+
 
 			/**
 			 * @brief drive the DE pin high to signal a write
@@ -71,6 +82,9 @@ namespace Smart_serial {
 			STM32_uart_port& operator=(STM32_uart_port&) = delete;
 
 	};
+	static const uint8_t MAX_UART_PORTS = 8U;
+
+	extern STM32_uart_port* g_port_registry[MAX_UART_PORTS];
 
 }
 
