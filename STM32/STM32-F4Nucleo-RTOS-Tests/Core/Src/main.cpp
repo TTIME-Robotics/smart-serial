@@ -22,7 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define SMART_SERIAL_STM32_RTOS_CLK
+#include "smart-serial/api.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -293,13 +294,20 @@ static void MX_GPIO_Init(void)
 void startBlink01(void *argument)
 {
   /* USER CODE BEGIN 5 */
+	Smart_serial::Clock::STM32_rtos_clock clk;
+	clk.delay(500U);
+	uint32_t start_time = clk.millis();
   /* Infinite loop */
   for(;;)
   {
+	uint32_t time = clk.millis();
+	if ((time - start_time) > 3000U){
+		osThreadSuspend(osThreadGetId());
+	}
 	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-    osDelay(350);
+    clk.delay(350U);
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-    osDelay(1000);
+    clk.delay(1000U);
   }
   /* USER CODE END 5 */
 }

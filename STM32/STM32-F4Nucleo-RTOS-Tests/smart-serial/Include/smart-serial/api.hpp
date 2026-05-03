@@ -18,7 +18,7 @@
 
 #ifdef SMART_SERIAL_STM32_RTOS_CLK
 
-// TODO: rtos clock include
+#include "smart-serial/clock/stm32_rtos_clock.hpp"
 
 #endif
 
