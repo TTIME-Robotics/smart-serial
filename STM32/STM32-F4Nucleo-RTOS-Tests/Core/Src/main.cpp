@@ -22,7 +22,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define SMART_SERIAL_STM32_RTOS_CLK
 #include "smart-serial/api.hpp"
 /* USER CODE END Includes */
 

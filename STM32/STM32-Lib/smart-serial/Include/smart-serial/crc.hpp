@@ -15,7 +15,7 @@
 #include "smart-serial/frame.hpp"
 #include <cstdint>
 
-namespace Smart_serial { namespace CRC {
+namespace Smart_serial { namespace CRC_ {
 
     static const size_t CRC_LENGTH = 2U;
 

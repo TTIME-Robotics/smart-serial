@@ -20,9 +20,7 @@
 
 #include "smart-serial/clock/stm32_rtos_clock.hpp"
 
-#endif
-
-#ifdef SMART_SERIAL_STM32_HAL_CLK
+#else
 
 #include "smart-serial/clock/stm32_hal_clock.hpp"
 
