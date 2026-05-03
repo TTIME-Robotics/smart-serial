@@ -44,6 +44,8 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+GPIO_TypeDef dir;
+uint32_t dir_pin=4;
 
 /* USER CODE END PV */
 
@@ -58,7 +60,7 @@ static void MX_USART2_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 #include "smart-serial/port/mock_port.hpp"
-Smart_serial::Mock_port<256, 256> port;
+Smart_serial::STM32_uart_port port (&huart2, &dir, dir_pin);
 Smart_serial::Clock::STM32_hal_clock hal_clk;
 Smart_serial::Slave slave(port, hal_clk, 0x02U, 0xFE, 0xAAU, 1000U);
 #include "smart-serial/crc.hpp"
@@ -81,25 +83,6 @@ int main(void)
 	HAL_Init();
 
   /* USER CODE BEGIN Init */
-	Smart_serial::Frame::Frame handshakeFrame {
-		Smart_serial::Frame::Frame_header {
-			0xAAU,
-			0xFEU,
-			0x02U,
-			0x06,
-			0U,
-		},
-		{}
-	};
-	Smart_serial::Frame::Raw_frame rFrame;
-	Smart_serial::Frame::dump_frame(&rFrame, &handshakeFrame);
-	uint16_t crc = Smart_serial::CRC_::compute_crc16(&rFrame);
-	Smart_serial::CRC_::append_crc16(&rFrame, 256U, rFrame.length, crc);
-	slave.set_auto_handshake(true);
-	port.inject_rx(rFrame.data, rFrame.length, false);
-	Smart_serial::Frame::Frame reqFrame;
-	slave.receive_request(&reqFrame, 1000U);
-	const uint8_t* txBuf = port.get_tx_data();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -118,8 +101,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  int32_t res = slave.send_response("Hello World!", 0x06U);
   while (1)
   {
+	  Smart_serial::Frame::Frame frame;
+	  Smart_serial::Receive_result result = slave.receive_request(&frame, 10000U);
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
 	  HAL_Delay(10U);
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
