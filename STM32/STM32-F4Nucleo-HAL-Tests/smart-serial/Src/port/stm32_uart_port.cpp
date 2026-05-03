@@ -30,12 +30,15 @@ int32_t STM32_uart_port::write(const uint8_t* const buf, const uint16_t len) {
 	return (status == HAL_OK) ? static_cast<int32_t>(len) : S_SERIAL_ERR;
 }
 
-int32_t STM32_uart_port::read_byte() {
-	// Use HAL to get single byte with no timeout (non-blocking)
-	uint8_t byte = 0x00U;
-	const HAL_StatusTypeDef status =
-			HAL_UART_Receive(huart_, &byte, 1U, 0U);
-	return (status == HAL_OK) ? static_cast<int32_t>(byte) : S_SERIAL_ERR;
+int32_t STM32_uart_port::read_byte()
+{
+    // Check RXNE flag — receive data register not empty
+    if ((huart_->Instance->SR & USART_SR_RXNE) == 0U)
+    {
+        return S_SERIAL_ERR; // nothing available
+    }
+    // Read directly from data register — clears RXNE flag automatically
+    return static_cast<int32_t>(huart_->Instance->DR & 0xFFU);
 }
 
 void STM32_uart_port::flush_rx() {

@@ -105,9 +105,8 @@ int main(void)
   while (1)
   {
 	  Smart_serial::Frame::Frame frame;
-	  Smart_serial::Receive_result result = slave.receive_request(&frame, 10000U);
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-	  HAL_Delay(10U);
+	  Smart_serial::Receive_result result = slave.receive_request(&frame, 1000U);
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 	  HAL_Delay(1000U);
     /* USER CODE END WHILE */

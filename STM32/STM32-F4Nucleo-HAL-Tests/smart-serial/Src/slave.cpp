@@ -180,7 +180,6 @@ int32_t Slave::read_raw_frame(Frame::Raw_frame* const raw_frame_out, uint32_t ti
                   const int32_t read_byte = serial_port.read_byte();
                   if (read_byte < 0) {
                       // No byte, continue
-                      clock.delay(1U);
                       continue;
                     }
                     // standard header byte
@@ -201,7 +200,6 @@ int32_t Slave::read_raw_frame(Frame::Raw_frame* const raw_frame_out, uint32_t ti
             const int32_t read_byte = serial_port.read_byte();
             if (read_byte < 0) {
                 // No byte, continue
-                clock.delay(1U);
                 continue;
             }
             raw_frame_out->data[raw_frame_out->length++] = static_cast<uint8_t>(read_byte);
