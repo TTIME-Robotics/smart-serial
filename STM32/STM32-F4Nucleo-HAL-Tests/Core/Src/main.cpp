@@ -59,11 +59,6 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-#include "smart-serial/port/mock_port.hpp"
-Smart_serial::STM32_uart_port port (&huart2, &dir, dir_pin);
-Smart_serial::Clock::STM32_hal_clock hal_clk;
-Smart_serial::Slave slave(port, hal_clk, 0x02U, 0xFE, 0xAAU, 1000U);
-#include "smart-serial/crc.hpp"
 
 /* USER CODE END 0 */
 
@@ -80,7 +75,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
   /* USER CODE END Init */
@@ -97,6 +92,10 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  Smart_serial::STM32_uart_port port (&huart2, &dir, dir_pin);
+  Smart_serial::Clock::STM32_hal_clock hal_clk;
+  Smart_serial::Slave slave(port, hal_clk, 0x02U, 0xFE, 0xAAU, 1000U);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -110,7 +109,6 @@ int main(void)
 	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 	  HAL_Delay(1000U);
     /* USER CODE END WHILE */
-
 
     /* USER CODE BEGIN 3 */
   }
