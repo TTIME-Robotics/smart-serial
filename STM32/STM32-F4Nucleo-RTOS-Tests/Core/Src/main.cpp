@@ -54,7 +54,7 @@ const osThreadAttr_t blink01_attributes = {
 osThreadId_t testSmartSerialHandle;
 const osThreadAttr_t testSmartSerial_attributes = {
   .name = "testSmartSerial",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
 /* USER CODE BEGIN PV */
@@ -259,7 +259,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DE_ENABLE_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -267,12 +267,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pins : DE_ENABLE_Pin LD2_Pin */
+  GPIO_InitStruct.Pin = DE_ENABLE_Pin|LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -293,20 +293,13 @@ static void MX_GPIO_Init(void)
 void startBlink01(void *argument)
 {
   /* USER CODE BEGIN 5 */
-	Smart_serial::Clock::STM32_rtos_clock clk;
-	clk.delay(500U);
-	uint32_t start_time = clk.millis();
   /* Infinite loop */
   for(;;)
   {
-	uint32_t time = clk.millis();
-	if ((time - start_time) > 3000U){
-		osThreadSuspend(osThreadGetId());
-	}
 	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-    clk.delay(350U);
+    osDelay(100U);
     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-    clk.delay(1000U);
+    osDelay(200U);
   }
   /* USER CODE END 5 */
 }
@@ -321,11 +314,18 @@ void startBlink01(void *argument)
 void startTests(void *argument)
 {
   /* USER CODE BEGIN startTests */
+	Smart_serial::Clock::STM32_rtos_clock clk;
+	Smart_serial::STM32_uart_port port (&huart2, NULL, 4U);
+	Smart_serial::Slave slave (port, clk, 0x02U, 0xFEU, 0xAAU, 500U);
+	slave.set_auto_handshake(true);
   /* Infinite loop */
   for(;;)
   {
-	  // TODO: Test smart serial Lib
-    osDelay(1);
+	  Smart_serial::Frame::Frame frame;
+	  Smart_serial::Receive_result result = slave.receive_request(&frame, 10000U);
+	  if (result > 0) {
+		  uint8_t* payload = frame.payload;
+	  }
   }
   /* USER CODE END startTests */
 }
